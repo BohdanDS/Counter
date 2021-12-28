@@ -1,26 +1,55 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, {useEffect, useReducer, useState} from 'react';
 import './App.css';
+import Counter from "./Counter";
+import CounterSettings from "./CounterSettings";
+import {reducer, StateType} from "./Reducer";
+
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+    const initialState: StateType = {
+        minValue: 0,
+        maxValue: 5,
+        currentValue: 0,
+    }
+
+    let [state, dispatch] = useReducer(reducer, initialState)
+    console.log('APP')
+    console.log(state.minValue)
+    console.log(state.maxValue)
+    let [validationMessage, setValidationMessage] = useState<string>('')
+
+
+    const getLocalValues = () => {
+        dispatch({type: 'GET_VALUES_FROM_LOCAL_STORAGE'})
+    }
+    useEffect(getLocalValues, [])
+
+    const inputChangeCheck = () => {
+        setValidationMessage('Set value')
+    }
+    const setButtonClick = () => {
+        setValidationMessage('')
+    }
+
+    return (
+        <div className="App">
+            <CounterSettings
+                minValue={state.minValue}
+                maxValue={state.maxValue} dispatch={dispatch}
+                actionType='UPDATE_MIN_VALUE'
+                inputChangeChaker={inputChangeCheck}
+                setButtonClick = {setButtonClick}
+            />
+            <Counter value={state.currentValue}
+                     initialValue={state.minValue}
+                     maxValue={state.maxValue}
+                     dispatch={dispatch}
+                     message={validationMessage}
+                     minValue = {state.minValue}
+            />
+        </div>
+    );
 }
 
 export default App;

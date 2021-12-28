@@ -1,0 +1,14 @@
+.redText {
+  color: red;
+  font-size: 32px;
+  font-style: italic;
+}
+
+.defColor {
+  color: #282c34;
+  font-size: 32px;
+}
+
+.colorBack {
+  background-color: DodgerBlue;
+}
